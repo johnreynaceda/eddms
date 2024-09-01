@@ -48,7 +48,7 @@ class IncomingList extends Component implements HasForms, HasTable
                     }
                 }
                 // No additional filtering for other user types
-            }))
+            })->orderBy('created_at', 'DESC'))
             ->columns([
                 TextColumn::make('document_code')->label('DOCUMENT CODE')->icon('heroicon-o-document-text')->iconColor('success')->searchable(),
                 ViewColumn::make('id')->label('RECIPIENT')->view('filament.tables.recipient'),
@@ -67,10 +67,19 @@ class IncomingList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-               ViewAction::make('view')->color('success')->button()->form([
-                ViewField::make('rating')
-    ->view('filament.forms.pdf')
-               ])
+               ViewAction::make('view')->color('success')->button()->form(
+                function($record){
+                    $record->update([
+                        'status' => 'received',
+                    ]);
+
+                    return [
+                        ViewField::make('rating')
+            ->view('filament.forms.pdf')
+                    ];
+
+                }
+               )
             ])
             ->bulkActions([
                 // ...

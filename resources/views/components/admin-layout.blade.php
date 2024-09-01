@@ -79,8 +79,9 @@
                                     class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
                                 <span
                                     class="flex flex-col items-start flex-shrink-0 h-full ml-2 leading-none translate-y-px">
-                                    <span>Adam Wathan</span>
-                                    <span class="text-xs font-light text-neutral-400">@adamwathan</span>
+                                    <span>{{ auth()->user()->name }}</span>
+                                    <span
+                                        class="text-xs truncate w-24 font-light text-neutral-400">{{ auth()->user()->email }}</span>
                                 </span>
                                 <svg class="absolute right-0 w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
