@@ -4,6 +4,7 @@ namespace App\Livewire\ProgramChair;
 
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\Faculty;
 use App\Models\Program;
 use App\Models\ProgramChair;
 use App\Models\Shop\Product;
@@ -38,14 +39,20 @@ class IncomingList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Document::query()->where(function ($query) {
+
+                $faculty = Faculty::where('user_id', auth()->user()->id)->first();
+
                 if (auth()->user()->user_type === 'program_chair') {
                     // Find the program chair record
                     $programChair = ProgramChair::where('user_id', auth()->user()->id)->first();
+
 
                     if ($programChair) {
                         // Filter by the program_id if a ProgramChair is found
                         $query->where('program_chair_id', $programChair->id);
                     }
+                }else{
+                    $query->where('faculty_id', $faculty->id);
                 }
                 // No additional filtering for other user types
             })->orderBy('created_at', 'DESC'))

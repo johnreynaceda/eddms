@@ -5,6 +5,7 @@ namespace App\Livewire\ProgramChair;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\Faculty;
 use App\Models\Post;
 use App\Models\ProgramChair;
 use App\Models\User;
@@ -60,8 +61,8 @@ class CreateDocument extends Component implements HasForms
 
             Select::make('faculty')
                 ->label('Faculty')
-                ->options(User::where('user_type', 'staff')->get()->mapWithKeys(function($record){
-                    return [$record->id => $record->name]; // Adjust according to your user model's structure
+                ->options(Faculty::where('user_id', '!=', auth()->user()->id)->get()->mapWithKeys(function($record){
+                    return [$record->id => $record->lastname. ', '. $record->firstname. ' '. $record->middlename[0]. '.']; // Adjust according to your program chair model's structure
                 }))
                 ->visible(fn ($get) => $get('can_view') == 'Faculty'),
                 ViewField::make('rating')

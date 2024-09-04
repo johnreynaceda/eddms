@@ -14,6 +14,10 @@ class Document extends Model
         return $this->belongsTo(ProgramChair::class);
     }
 
+    public function faculty(){
+        return $this->belongsTo(Faculty::class);
+    }
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
