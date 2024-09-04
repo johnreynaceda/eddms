@@ -50,7 +50,15 @@ class User extends Authenticatable
         return $this->hasOne(User::class);
     }
 
+    public function faculty(){
+        return $this->hasOne(Faculty::class);
+    }
+
     public function documents(){
         return $this->hasMany(Document::class);
+    }
+
+    public function announcements(){
+        return $this->hasMany(Announcement::class);
     }
 }

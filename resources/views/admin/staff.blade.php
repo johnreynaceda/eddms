@@ -1,6 +1,6 @@
 @section('title', 'Staffs')
 <x-admin-layout>
     <div>
-        coming soon...
+        <livewire:admin.faculty-list />
     </div>
 </x-admin-layout>

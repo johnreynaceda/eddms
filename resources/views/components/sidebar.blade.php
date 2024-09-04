@@ -96,6 +96,24 @@
                         </span>
                     </a>
                 </li>
+                <li>
+                    <a class="{{ request()->routeIs('admin.announcement') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('admin.announcement') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-speakerphone">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 8a3 3 0 0 1 0 6" />
+                            <path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5" />
+                            <path
+                                d="M12 8h0l4.524 -3.77a.9 .9 0 0 1 1.476 .692v12.156a.9 .9 0 0 1 -1.476 .692l-4.524 -3.77h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h8" />
+                        </svg>
+                        <span class="ml-3">
+                            Announcements
+                        </span>
+                    </a>
+                </li>
 
             </ul>
             <p class="px-4 pt-5 text-xs font-semibold text-gray-100/50 uppercase">
@@ -107,7 +125,8 @@
                         href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog">
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
                             <path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" />
@@ -203,65 +222,88 @@
                         </span>
                     </a>
                 </li>
-                <li>
-                    <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
-                        href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-server-cog">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
-                            <path d="M12 20h-6a3 3 0 0 1 -3 -3v-2a3 3 0 0 1 3 -3h10.5" />
-                            <path d="M18 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                            <path d="M18 14.5v1.5" />
-                            <path d="M18 20v1.5" />
-                            <path d="M21.032 16.25l-1.299 .75" />
-                            <path d="M16.27 19l-1.3 .75" />
-                            <path d="M14.97 16.25l1.3 .75" />
-                            <path d="M19.733 19l1.3 .75" />
-                            <path d="M7 8v.01" />
-                            <path d="M7 16v.01" />
-                        </svg>
-                        <span class="ml-3">
-                            Maintenance
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
-                        href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-                            <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-                            <path d="M10 12l4 0" />
-                        </svg>
-                        <span class="ml-3">
-                            Archives
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
-                        href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-file-description">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                            <path d="M9 17h6" />
-                            <path d="M9 13h6" />
-                        </svg>
-                        <span class="ml-3">
-                            Reports
-                        </span>
-                    </a>
-                </li>
+                @if (auth()->user()->user_type == 'program_chair')
+                    <li>
+                        <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                            href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-server-cog">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
+                                <path d="M12 20h-6a3 3 0 0 1 -3 -3v-2a3 3 0 0 1 3 -3h10.5" />
+                                <path d="M18 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M18 14.5v1.5" />
+                                <path d="M18 20v1.5" />
+                                <path d="M21.032 16.25l-1.299 .75" />
+                                <path d="M16.27 19l-1.3 .75" />
+                                <path d="M14.97 16.25l1.3 .75" />
+                                <path d="M19.733 19l1.3 .75" />
+                                <path d="M7 8v.01" />
+                                <path d="M7 16v.01" />
+                            </svg>
+                            <span class="ml-3">
+                                Maintenance
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                            href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+                                <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+                                <path d="M10 12l4 0" />
+                            </svg>
+                            <span class="ml-3">
+                                Archives
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                            href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-file-description">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                <path d="M9 17h6" />
+                                <path d="M9 13h6" />
+                            </svg>
+                            <span class="ml-3">
+                                Reports
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="{{ request()->routeIs('program_chair.announcement') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                            href="{{ route('program_chair.announcement') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-speakerphone">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M18 8a3 3 0 0 1 0 6" />
+                                <path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5" />
+                                <path
+                                    d="M12 8h0l4.524 -3.77a.9 .9 0 0 1 1.476 .692v12.156a.9 .9 0 0 1 -1.476 .692l-4.524 -3.77h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h8" />
+                            </svg>
+                            <span class="ml-3">
+                                Announcements
+                            </span>
+                        </a>
+                    </li>
+                @endif
             </ul>
             <p class="px-4 pt-5 text-xs font-semibold text-gray-100/50 uppercase">
                 SETTINGS

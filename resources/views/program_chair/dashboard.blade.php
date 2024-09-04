@@ -76,6 +76,10 @@
                 </div>
             </div>
         </div>
+        <div class="mt-10 grid grid-cols-2 gap-10">
+            <div></div>
+            <livewire:notifs />
+        </div>
         <div class="mt-10">
             <section class="">
                 <div class="w-full  py-6 mx-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 ">

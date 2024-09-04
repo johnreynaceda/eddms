@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
     case 'program_chair':
         return redirect()->route('program_chair.dashboard');
     case 'staff':
-        // return redirect()->route('admin.dashboard');
+        return redirect()->route('staff.dashboard');
     default:
         # code...
         break;
@@ -34,6 +34,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
     Route::get('/category', function () {
         return view('admin.category');
     })->name('admin.category');
+    Route::get('/announcement', function () {
+        return view('admin.announcement');
+    })->name('admin.announcement');
 });
 
 Route::prefix('program_chair')->middleware(['auth', 'verified'])->group(function(){
@@ -49,6 +52,15 @@ Route::prefix('program_chair')->middleware(['auth', 'verified'])->group(function
     Route::get('/outgoing', function () {
         return view('program_chair.outgoing');
     })->name('program_chair.outgoing');
+    Route::get('/announcement', function () {
+        return view('program_chair.announcement');
+    })->name('program_chair.announcement');
+});
+
+Route::prefix('staff')->middleware(['auth', 'verified'])->group(function(){
+    Route::get('/dashboard', function () {
+        return view('staff.dashboard');
+    })->name('staff.dashboard');
 });
 
 Route::middleware('auth')->group(function () {
