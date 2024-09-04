@@ -4,7 +4,26 @@
         <div class="grid grid-cols-4 gap-5">
             <div
                 class="border p-5 py-6 shadow-xl bg-[#E69898] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $documents = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $documents = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->count();
+                        } else {
+                            $documents = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $documents }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -18,7 +37,28 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#DADB87] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $pending = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $pending = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->where('status', 'pending')
+                                ->count();
+                        } else {
+                            $pending = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->where('status', 'pending')
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $pending }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -33,7 +73,28 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#74B6C4] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $received = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $received = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->where('status', 'received')
+                                ->count();
+                        } else {
+                            $received = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->where('status', 'received')
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $received }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -55,7 +116,23 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#B77DB8] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $outgoing = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $outgoing = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where('user_id', auth()->user()->id)
+                                ->count();
+                        } else {
+                            $outgoing = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('user_id', auth()->user()->id)
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $outgoing }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -72,7 +149,7 @@
                         <path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69" />
                         <path d="M9 12l2 2l4 -4" />
                     </svg>
-                    <h1>Ended Docs</h1>
+                    <h1>Outgoing Docs</h1>
                 </div>
             </div>
         </div>

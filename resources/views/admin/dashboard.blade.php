@@ -1,7 +1,7 @@
 @section('title', 'Dashboard')
 <x-admin-layout>
     <div>
-        <div class="grid grid-cols-4 gap-5">
+        {{-- <div class="grid grid-cols-4 gap-5">
             <div
                 class="border p-5 py-6 shadow-xl bg-[#E69898] text-white rounded-2xl grid text-center place-content-center">
                 <h1 class="text-3xl font-bold font-montserrat">000</h1>
@@ -75,7 +75,7 @@
                     <h1>Ended Docs</h1>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="mt-10 grid grid-cols-2 gap-10">
             <div></div>
             <livewire:notifs />

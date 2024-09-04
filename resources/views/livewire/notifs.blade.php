@@ -28,7 +28,7 @@
                         </div>
                         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                             <p class="text-xs leading-6 text-gray-900 ">Posted by:
-                                {{ auth()->user()->user_type }}</p>
+                                {{ $item->user->user_type }}</p>
                             <p class="mt-1 text-xs leading-5 text-gray-500">
                                 {{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</p>
                         </div>
