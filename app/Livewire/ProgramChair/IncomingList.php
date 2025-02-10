@@ -2,9 +2,11 @@
 
 namespace App\Livewire\ProgramChair;
 
+use App\Events\SendNotification;
 use App\Models\Category;
 use App\Models\Document;
 use App\Models\Faculty;
+use App\Models\Notification;
 use App\Models\Program;
 use App\Models\ProgramChair;
 use App\Models\Shop\Product;
@@ -76,9 +78,24 @@ class IncomingList extends Component implements HasForms, HasTable
             ->actions([
                ViewAction::make('view')->color('success')->button()->form(
                 function($record){
+                    $user_id = $record->program_chair_id == null ? Faculty::find($record->faculty_id)->first()->user_id : ProgramChair::find($record->program_chair_id)->user_id;
+
+                    // dd($user_id);
+                   if ($record->status != 'received') {
                     $record->update([
                         'status' => 'received',
                     ]);
+
+                   
+
+                    SendNotification::dispatch($record->user_id);
+                    Notification::create([
+                        'receiver_id' => $record->user_id,
+                        'sender_id' => auth()->user()->id,
+                        'details' => auth()->user()->name. ' has received the document you sent. ',
+                    ]);
+                   }
+
 
                     return [
                         ViewField::make('rating')

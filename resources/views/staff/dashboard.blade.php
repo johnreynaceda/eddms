@@ -4,7 +4,26 @@
         <div class="grid grid-cols-4 gap-5">
             <div
                 class="border p-5 py-6 shadow-xl bg-[#E69898] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $documents = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $documents = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->count();
+                        } else {
+                            $documents = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $documents }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -18,7 +37,28 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#DADB87] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $pending = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $pending = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->where('status', 'pending')
+                                ->count();
+                        } else {
+                            $pending = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->where('status', 'pending')
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $pending }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -33,7 +73,28 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#74B6C4] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $received = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $received = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where(
+                                    'program_chair_id',
+                                    \App\Models\ProgramChair::where('user_id', auth()->user()->id)->first()->id,
+                                )
+                                ->where('status', 'received')
+                                ->count();
+                        } else {
+                            $received = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('faculty_id', auth()->user()->faculty->id)
+                                ->where('status', 'received')
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $received }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -55,7 +116,23 @@
             </div>
             <div
                 class="border p-5 py-6 shadow-xl bg-[#B77DB8] text-white rounded-2xl grid text-center place-content-center">
-                <h1 class="text-3xl font-bold font-montserrat">000</h1>
+                <h1 class="text-3xl font-bold font-montserrat">
+                    @php
+                        $outgoing = 0;
+                        if (auth()->user()->user_type == 'program_chair') {
+                            $outgoing = \App\Models\Document::where('can_view', 'Program Chair')
+                                ->where('user_id', auth()->user()->id)
+                                ->count();
+                        } else {
+                            $outgoing = \App\Models\Document::where('can_view', 'Faculty')
+                                ->where('user_id', auth()->user()->id)
+                                ->count();
+                        }
+                    @endphp
+
+
+                    {{ $outgoing }}
+                </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -72,68 +149,76 @@
                         <path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69" />
                         <path d="M9 12l2 2l4 -4" />
                     </svg>
-                    <h1>Ended Docs</h1>
+                    <h1>Outgoing Docs</h1>
                 </div>
             </div>
         </div>
-        <div class="mt-10 grid grid-cols-2 gap-10">
-            <div></div>
-            <livewire:notifs />
-        </div>
-        <div class="mt-10">
-            <section class="">
-                <div class="w-full  py-6 mx-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 ">
+        <div class="grid-cols-3 grid gap-10 mt-10">
+            <div class="col-span-2">
+                <div class="">
+                    <section class="">
+                        <div class="w-full  py-6  space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 ">
 
-                    <div class="flex flex-col items-center sm:px-5 md:flex-row">
-                        <div class="flex flex-col items-start justify-center w-full h-full py-6 mb-6 md:mb-0 md:w-1/2">
-                            <div
-                                class="flex flex-col items-start justify-center h-full space-y-3 transform md:pl-10 lg:pl-16 md:space-y-5">
-                                <h1 class="text-5xl font-bold text-gray-700">VISION</h1>
-                                <div class="mt-5 text-justify">
-                                    <p>A trailblazer in arts, science and technology in the region.</p>
+                            <div class="flex flex-col items-center space-x-3  md:flex-row">
+                                <div
+                                    class="flex flex-col items-start justify-center w-full h-full py-6 mb-6 md:mb-0 md:w-1/2">
+                                    <div
+                                        class="flex flex-col items-start justify-center h-full space-y-3 transform   space-y-5">
+                                        <h1 class="text-5xl font-bold text-gray-700">VISION</h1>
+                                        <div class="mt-5 text-justify">
+                                            <p>A trailblazer in arts, science and technology in the region.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <a href="#_" class="block">
+                                        <img class="object-cover w-full h-full rounded-lg max-h-64 sm:max-h-96"
+                                            src="{{ asset('images/main-campus.jpg') }}">
+                                    </a>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </section>
+                    <section class="">
+                        <div class="w-full  py-6 mx-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 ">
+
+                            <div class="flex flex-col items-center md:flex-row">
+                                <div class="w-full md:w-1/2">
+                                    <a href="#_" class="block">
+                                        <img class="object-cover w-full h-full rounded-lg max-h-64 sm:max-h-96"
+                                            src="{{ asset('images/sksu_bg.jpg') }}">
+                                    </a>
+                                </div>
+                                <div
+                                    class="flex flex-col items-start justify-center w-full h-full py-6 mb-6 md:mb-0 md:w-1/2">
+                                    <div
+                                        class="flex flex-col items-start justify-center h-full space-y-3 transform md:pl-10 lg:pl-16 md:space-y-5">
+                                        <h1 class="text-5xl font-bold text-gray-700">MISSION</h1>
+                                        <div class="mt-5 text-justify">
+                                            <p>The University shall primarily provide advanced instruction and
+                                                professional
+                                                training in science and technology, agriculture, fisheries, education
+                                                and other
+                                                relevant fields of study. It shall also undertake research and extension
+                                                services and provide progressive leadership in its areas of
+                                                specialization.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-full md:w-1/2">
-                            <a href="#_" class="block">
-                                <img class="object-cover w-full h-full rounded-lg max-h-64 sm:max-h-96"
-                                    src="{{ asset('images/main-campus.jpg') }}">
-                            </a>
-                        </div>
 
-                    </div>
 
+                        </div>
+                    </section>
 
                 </div>
-            </section>
-            <section class="">
-                <div class="w-full  py-6 mx-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 ">
-
-                    <div class="flex flex-col items-center sm:px-5 md:flex-row">
-                        <div class="w-full md:w-1/2">
-                            <a href="#_" class="block">
-                                <img class="object-cover w-full h-full rounded-lg max-h-64 sm:max-h-96"
-                                    src="{{ asset('images/sksu_bg.jpg') }}">
-                            </a>
-                        </div>
-                        <div class="flex flex-col items-start justify-center w-full h-full py-6 mb-6 md:mb-0 md:w-1/2">
-                            <div
-                                class="flex flex-col items-start justify-center h-full space-y-3 transform md:pl-10 lg:pl-16 md:space-y-5">
-                                <h1 class="text-5xl font-bold text-gray-700">MISSION</h1>
-                                <div class="mt-5 text-justify">
-                                    <p>The University shall primarily provide advanced instruction and professional
-                                        training in science and technology, agriculture, fisheries, education and other
-                                        relevant fields of study. It shall also undertake research and extension
-                                        services and provide progressive leadership in its areas of specialization.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </section>
-
+            </div>
+            <div>
+                <livewire:notifs />
+            </div>
         </div>
     </div>
 </x-admin-layout>

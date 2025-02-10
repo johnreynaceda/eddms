@@ -2,10 +2,12 @@
 
 namespace App\Livewire\ProgramChair;
 
+use App\Events\SendNotification;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Document;
 use App\Models\Faculty;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\ProgramChair;
 use App\Models\User;
@@ -101,6 +103,13 @@ class CreateDocument extends Component implements HasForms
             'file_path' => $value->store('Attachment', 'public'),
            ]);
         }
+        $user_id = $this->program_chair == null ? Faculty::find($this->faculty)->first()->user_id : ProgramChair::find($this->program_chair)->user_id;
+        SendNotification::dispatch($user_id);
+        Notification::create([
+            'receiver_id' => $user_id,
+            'sender_id' => auth()->user()->id,
+            'details' => auth()->user()->name. ' has sent you a document. ',
+        ]);
         sweetalert()->success('Data is successfully saved!');
         return redirect()->route('program_chair.dashboard');
     }

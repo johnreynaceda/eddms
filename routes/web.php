@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\UserActive;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,20 +9,20 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-   switch (auth()->user()->user_type) {
-    case 'admin':
-        return redirect()->route('admin.dashboard');
-    case 'program_chair':
-        return redirect()->route('program_chair.dashboard');
-    case 'staff':
-        return redirect()->route('staff.dashboard');
-    default:
-        # code...
-        break;
-   }
+    switch (auth()->user()->user_type) {
+        case 'admin':
+            return redirect()->route('admin.dashboard');
+        case 'program_chair':
+            return redirect()->route('program_chair.dashboard');
+        case 'staff':
+            return redirect()->route('staff.dashboard');
+        default:
+            # code...
+            break;
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -37,9 +38,12 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
     Route::get('/announcement', function () {
         return view('admin.announcement');
     })->name('admin.announcement');
+    Route::get('/reports', function () {
+        return view('admin.reports');
+    })->name('admin.reports');
 });
 
-Route::prefix('program_chair')->middleware(['auth', 'verified'])->group(function(){
+Route::prefix('program_chair')->middleware(['auth', 'verified', UserActive::class])->group(function () {
     Route::get('/dashboard', function () {
         return view('program_chair.dashboard');
     })->name('program_chair.dashboard');
@@ -55,9 +59,15 @@ Route::prefix('program_chair')->middleware(['auth', 'verified'])->group(function
     Route::get('/announcement', function () {
         return view('program_chair.announcement');
     })->name('program_chair.announcement');
+    Route::get('/archives', function () {
+        return view('program_chair.archives');
+    })->name('program_chair.archives');
+    Route::get('/archives/{id}', function () {
+        return view('program_chair.archives-open');
+    })->name('program_chair.archives-open');
 });
 
-Route::prefix('staff')->middleware(['auth', 'verified'])->group(function(){
+Route::prefix('staff')->middleware(['auth', 'verified', UserActive::class])->group(function () {
     Route::get('/dashboard', function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
@@ -69,4 +79,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
