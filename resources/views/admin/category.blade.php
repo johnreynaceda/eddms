@@ -1,6 +1,7 @@
-@section('title', 'Categories')
+@section('title', '')
 <x-admin-layout>
-    <div>
+    <div class="space-y-10">
+        <livewire:admin.classification />
         <livewire:admin.category-list />
     </div>
 </x-admin-layout>

@@ -11,6 +11,7 @@ use App\Models\Program;
 use App\Models\ProgramChair;
 use App\Models\Shop\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
@@ -64,11 +65,29 @@ class IncomingList extends Component implements HasForms, HasTable
                 ViewColumn::make('details')->label('DETAILS')->view('filament.tables.details'),
 
                 TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
-                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn (string $state): string => match ($state) {
-                    'pending' => 'warning',
-                    'received' => 'success',
-                    'rejected' => 'danger',
-                }),
+               
+                TextColumn::make('status')
+    
+    ->label('STATUS')
+    ->searchable()
+    ->badge()
+    ->color(fn (?string $state): string => match ($state) { // Handle nullable state
+        'pending' => 'warning',
+        'received' => 'success',
+        'rejected' => 'danger',
+        default => 'secondary'
+    }),
+                TextColumn::make('is_deadline')
+                ->label('IS DEADLINE')
+                ->badge()
+                ->formatStateUsing(fn ($state) => !empty($state) ? 'deadline' : 'not due') // Ensure null is handled
+                ->color(fn (?string $state): string => match ($state) { // Handle nullable state
+                    'deadline' => 'danger', 
+                    'not due' => 'secondary', // Set a meaningful label instead of empty string
+                    default => 'secondary' 
+                })
+                ->visible(fn ($record) => !empty($record->is_deadline)),
+                TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
 
 
                 ])
@@ -76,7 +95,7 @@ class IncomingList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-               ViewAction::make('view')->color('success')->button()->form(
+               ViewAction::make('view')->color('success')->button()->disabled(fn($record) => $record->is_deadline)->form(
                 function($record){
                     $user_id = $record->program_chair_id == null ? Faculty::find($record->faculty_id)->first()->user_id : ProgramChair::find($record->program_chair_id)->user_id;
 
@@ -110,8 +129,30 @@ class IncomingList extends Component implements HasForms, HasTable
             ]);
     }
 
+
+    public function checkAllDocument(){
+        $today = Carbon::now()->toDateString(); // Get today's date in 'YYYY-MM-DD' format
+        $docs = Document::whereDate('deadline', $today)->get(); // Fetch documents with today's deadline
+        $docss = Document::where('is_deadline', true)->whereDate('deadline', '!=', $today)->get();
+
+        if ($docs->isEmpty()) {
+           foreach ($docss as $doc) {
+           $doc->update([
+            'is_deadline' => false,
+           ]);
+        }
+        }
+    
+        foreach ($docs as $doc) {
+           $doc->update([
+            'is_deadline' => true,
+           ]);
+        }
+    }
+
     public function render()
     {
+        $this->checkAllDocument();
         return view('livewire.program-chair.incoming-list');
     }
 }

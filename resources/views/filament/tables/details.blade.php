@@ -1,4 +1,5 @@
-<div class="ml-3 w-40">
+<div class="ml-3 w-69">
     <p class="truncate">
-        {{ $getRecord()->category->name . ' - ' . $getRecord()->category->type . ': ' . $getRecord()->description }}</p>
+        {{ $getRecord()->category->classification->name . ' - ' . $getRecord()->category->name }}
+    </p>
 </div>

@@ -24,7 +24,7 @@
                 href="{{ route('program_chair.archives-open', ['id' => $cat->id]) }}" target="_blank">
                 <x-shared.folder />
                 <div class=" text-center">
-                    <p class="text-sm text">{{ $cat->name . ' - ' . $cat->type }}</p>
+                    <p class="text-sm text">{{ $cat->classification->name . ' - ' . $cat->name }}</p>
                 </div>
             </a>
         @empty

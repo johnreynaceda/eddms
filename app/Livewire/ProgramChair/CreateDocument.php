@@ -40,11 +40,11 @@ class CreateDocument extends Component implements HasForms
         return $form
             ->schema([
                Section::make('Add Details')->icon('heroicon-m-user')->description('Ensure all fields are filled out accurately before submission.')->aside()->schema([
-                TextInput::make('document_code')->label('Document Code')->required()->columnSpan(2),
+                TextInput::make('document_code')->label('Document Code')->disabled()->required()->columnSpan(2),
                 Textarea::make('subject')->required(),
-                Textarea::make('description')->required(),
+                // Textarea::make('description')->required(),
                 Select::make('category')->label('Classification')->options(Category::all()->mapWithKeys( function($record){
-                    return [$record->id => $record->name. ' - ' . $record->type];
+                    return [$record->id => $record->classification->name. ' - ' . $record->name];
                 })),
                 Select::make('can_view')
                 ->label('Can View')
@@ -70,7 +70,7 @@ class CreateDocument extends Component implements HasForms
                 ViewField::make('rating')
             ->view('filament.forms.blank')->columnSpan(2),
             DatePicker::make('date_of_letter')->required(),
-            DatePicker::make('deadline')->required(),
+            DatePicker::make('deadline')->required()->visible(auth()->user()->user_type == 'program_chair'),
 
                ])->columns(2),
                Section::make('Add Attachments')->aside()->icon('heroicon-m-paper-clip')->schema([
@@ -87,7 +87,6 @@ class CreateDocument extends Component implements HasForms
             'user_id' => auth()->user()->id,  // Assuming user_id is defined in your User model
             'document_code' => $this->document_code,
             'subject' => $this->subject,
-            'description' => $this->description,
             'category_id' => $this->category,
             'can_view' => $this->can_view,
             'program_chair_id' => $this->program_chair?? null,
@@ -111,11 +110,22 @@ class CreateDocument extends Component implements HasForms
             'details' => auth()->user()->name. ' has sent you a document. ',
         ]);
         sweetalert()->success('Data is successfully saved!');
+       if (auth()->user()->user_type == 'program_chair') {
         return redirect()->route('program_chair.dashboard');
+       }else{
+        return redirect()->route('staff.dashboard');
+       }
     }
+
+    public function generateUniqueCode($count) {
+        $this->document_code = sprintf("DC_%06d", $count + 1);
+    }
+
 
     public function render()
     {
+        $count = Document::count();
+        $this->generateUniqueCode($count);
         return view('livewire.program-chair.create-document');
     }
 }

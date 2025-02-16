@@ -160,20 +160,158 @@
             </ul>
 
         </nav>
+    @elseif (auth()->user()->user_type == 'staff')
+        <nav class="flex-1 space-y-1 ">
+            @if (auth()->user()->user_type == 'program_chair')
+                <a href="{{ route('program_chair.compose') }}""
+                    class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
+
+                    <span class="font-semibold">Compose</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                        <path d="M13.5 6.5l4 4" />
+                    </svg>
+                </a>
+            @else
+                <a href="{{ route('staff.compose') }}""
+                    class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
+
+                    <span class="font-semibold">Compose</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                        <path d="M13.5 6.5l4 4" />
+                    </svg>
+                </a>
+            @endif
+            <p class="px-4 pt-10 text-xs font-semibold text-main_text uppercase">
+
+            </p>
+            <ul>
+                <li>
+                    <a class="{{ request()->routeIs('staff.dashboard') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('staff.dashboard') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                            <path d="M13.45 11.55l2.05 -2.05" />
+                            <path d="M6.4 20a9 9 0 1 1 11.2 0z" />
+                        </svg>
+                        <span class="ml-3">
+                            Dashboard
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+            <p class="px-4 pt-5 text-xs font-semibold text-gray-100/50 uppercase">
+                MANAGEMENT
+            </p>
+            <ul>
+                <li>
+                    <a class="{{ request()->routeIs('staff.incoming') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('staff.incoming') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-folder-up">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 19h-7a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v3.5" />
+                            <path d="M19 22v-6" />
+                            <path d="M22 19l-3 -3l-3 3" />
+                        </svg>
+                        <span class="ml-3">
+                            Incoming
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ request()->routeIs('staff.outgoing') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('staff.outgoing') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-folder-down">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 19h-7a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v3.5" />
+                            <path d="M19 16v6" />
+                            <path d="M22 19l-3 3l-3 -3" />
+                        </svg>
+                        <span class="ml-3">
+                            Outgoing
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+            <p class="px-4 pt-5 text-xs font-semibold text-gray-100/50 uppercase">
+                SETTINGS
+            </p>
+            <ul>
+                <li>
+                    <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" />
+                            <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                            <path d="M19.001 15.5v1.5" />
+                            <path d="M19.001 21v1.5" />
+                            <path d="M22.032 17.25l-1.299 .75" />
+                            <path d="M17.27 20l-1.3 .75" />
+                            <path d="M15.97 17.25l1.3 .75" />
+                            <path d="M20.733 20l1.3 .75" />
+                        </svg>
+                        <span class="ml-3">
+                            My Account
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
     @else
         <nav class="flex-1 space-y-1 ">
-            <a href="{{ route('program_chair.compose') }}""
-                class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
+            @if (auth()->user()->user_type == 'program_chair')
+                <a href="{{ route('program_chair.compose') }}""
+                    class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
 
-                <span class="font-semibold">Compose</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                    <path d="M13.5 6.5l4 4" />
-                </svg>
-            </a>
+                    <span class="font-semibold">Compose</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                        <path d="M13.5 6.5l4 4" />
+                    </svg>
+                </a>
+            @else
+                <a href="{{ route('staff.compose') }}""
+                    class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
+
+                    <span class="font-semibold">Compose</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                        <path d="M13.5 6.5l4 4" />
+                    </svg>
+                </a>
+            @endif
             <p class="px-4 pt-10 text-xs font-semibold text-main_text uppercase">
 
             </p>

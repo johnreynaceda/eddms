@@ -1,7 +1,7 @@
 @php
     $name = \App\Models\Category::where('id', request('id'))->first();
 @endphp
-@section('title', $name->name . ' - ' . $name->type)
+@section('title', $name->classification->name . ' - ' . $name->name)
 
 <x-admin-layout>
     <div>

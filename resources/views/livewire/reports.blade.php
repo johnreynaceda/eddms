@@ -17,7 +17,7 @@
                     <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
                         DETAILS
                     </th>
-                    <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
+                    <th class="border  text-left px-2 text-sm font-semibold tecxt-gray-700 py-2">
                         DATE OF LETTER
                     </th>
                     <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
@@ -33,7 +33,7 @@
                         </td>
                         <td class="border text-sm text-gray-700  px-3 py-1">
                             <div>
-                                @if ($item->can_view == 'Program Chair')
+                                {{-- @if ($item->can_view == 'Program Chair')
                                     <h1 class="uppercase">
                                         {{ $item->programChair->lastname . ', ' . $item->programChair->firstname . ' ' . $item->programChair->middlename[0] . '.' }}
                                     </h1>
@@ -48,7 +48,7 @@
                                     <h1 class="text-xs font-medium leading-3 text-gray-700">
                                         Faculty
                                     </h1>
-                                @endif
+                                @endif --}}
                             </div>
                         </td>
                         <td class="border text-sm text-gray-700  px-3 py-1">

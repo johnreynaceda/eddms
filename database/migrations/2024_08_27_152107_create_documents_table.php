@@ -16,14 +16,14 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->string('document_code');
             $table->string('subject');
-            $table->string('description');
             $table->foreignId('category_id');
             $table->string('can_view');
             $table->foreignId('program_chair_id')->nullable();
             $table->foreignId('faculty_id')->nullable();
             $table->date('date_of_letter');
-            $table->date('deadline');
+            $table->date('deadline')->nullable();
             $table->string('status')->default('pending');
+            $table->boolean('is_deadline')->default(false);
             $table->timestamps();
         });
     }

@@ -83,7 +83,7 @@
 
                                     <td class="p-4">
                                         <p class="truncate">
-                                            {{ $item->category->name . ' - ' . $item->category->type . ': ' . $item->description }}
+                                            {{ $item->category->classification->name . ' - ' . $item->category->name }}
                                         </p>
                                     </td>
                                     <td class="p-4">

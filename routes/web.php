@@ -71,6 +71,15 @@ Route::prefix('staff')->middleware(['auth', 'verified', UserActive::class])->gro
     Route::get('/dashboard', function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
+    Route::get('/compose', function () {
+        return view('staff.compose');
+    })->name('staff.compose');
+    Route::get('/incoming', function () {
+        return view('program_chair.incoming');
+    })->name('staff.incoming');
+    Route::get('/outgoing', function () {
+        return view('program_chair.outgoing');
+    })->name('staff.outgoing');
 });
 
 Route::middleware('auth')->group(function () {

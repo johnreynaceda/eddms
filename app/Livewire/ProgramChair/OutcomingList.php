@@ -8,9 +8,15 @@ use App\Models\Program;
 use App\Models\ProgramChair;
 use App\Models\Shop\Product;
 use App\Models\User;
+use Carbon\Carbon;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -34,16 +40,29 @@ class OutcomingList extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
+    public $upload = [];
+
     public function table(Table $table): Table
     {
         return $table
             ->query(Document::query()->where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC'))
             ->columns([
                 TextColumn::make('document_code')->label('DOCUMENT CODE')->icon('heroicon-o-document-text')->iconColor('success')->searchable(),
-                ViewColumn::make('id')->label('RECIPIENT')->view('filament.tables.recipient'),
-                ViewColumn::make('details')->label('DETAILS')->view('filament.tables.details'),
+                ViewColumn::make('id')->label('RECIPIENT')->view('filament.tables.recipient')->searchable(query: function ($query, $search) {
+                    return $query->whereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+                }),
+                ViewColumn::make('details')->label('DETAILS')->view('filament.tables.details')->searchable(query: function ($query, $search) {
+                    return $query->whereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                          ->orWhereHas('classification', function ($q) use ($search) {
+                              $q->where('name', 'like', "%{$search}%");
+                          });
+                    });
+                }),
 
-                TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
+                TextColumn::make('date_of_letter')->date('m-d-Y')->label('DATE OF LETTER')->searchable('date_of_letter'),
                 TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn (string $state): string => match ($state) {
                     'pending' => 'warning',
                     'received' => 'success',
@@ -59,7 +78,41 @@ class OutcomingList extends Component implements HasForms, HasTable
                ViewAction::make('view')->color('success')->button()->form([
                 ViewField::make('rating')
     ->view('filament.forms.pdf')
-               ])
+               ]),
+               EditAction::make('edit')->color('success')->form([
+                Grid::make(2)->schema([
+                    Textarea::make('subject')->required(),
+                Select::make('category_id')->label('Classification')->options(Category::all()->mapWithKeys( function($record){
+                    return [$record->id => $record->classification->name. ' - ' . $record->name];
+                })),
+                DatePicker::make('deadline')->required(),
+            ]),
+            Fieldset::make('Attachments')->schema([
+                ViewField::make('file')->view('filament.forms.upload')
+            ])
+               ])->action(
+                function($record, $data){
+                    $this->validate([
+                        'upload' => 'required'
+                    ]);
+
+                    $record->update([
+                        'subject' => $data['subject'],
+                        'category_id' => $data['category_id'],
+                        'deadline' => Carbon::parse($data['deadline']),
+                    ]);
+
+                    $docs = $record->attachments->first();
+
+                    foreach ($this->upload as $key => $value) {
+                      $docs->update([
+                        'file_path' => $value->store('Attachment', 'public'),
+                      ]);
+                    }
+                    
+                    
+                }
+            ),
             ])
             ->bulkActions([
                 // ...
