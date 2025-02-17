@@ -57,14 +57,14 @@ class CreateDocument extends Component implements HasForms
             Select::make('program_chair')
                 ->label('Program Chair')
                 ->options(ProgramChair::where('user_id', '!=', auth()->user()->id)->get()->mapWithKeys(function($record){
-                    return [$record->id => $record->lastname. ', '. $record->firstname. ' '. $record->middlename[0]. '.']; // Adjust according to your program chair model's structure
+                    return [$record->id => $record->lastname. ', '. $record->firstname]; // Adjust according to your program chair model's structure
                 }))
                 ->visible(fn ($get) => $get('can_view') == 'Program Chair'),
 
             Select::make('faculty')
                 ->label('Faculty')
                 ->options(Faculty::where('user_id', '!=', auth()->user()->id)->get()->mapWithKeys(function($record){
-                    return [$record->id => $record->lastname. ', '. $record->firstname. ' '. $record->middlename[0]. '.']; // Adjust according to your program chair model's structure
+                    return [$record->id => $record->lastname. ', '. $record->firstname]; // Adjust according to your program chair model's structure
                 }))
                 ->visible(fn ($get) => $get('can_view') == 'Faculty'),
                 ViewField::make('rating')
