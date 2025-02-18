@@ -63,11 +63,11 @@
                                     <td class="p-4">
                                         <div>
                                             <h1 class="uppercase">
-                                                {{ $getRecord()->user->name }}
+                                                {{ $item->user->name }}
                                             </h1>
                                             <h1 class="text-xs font-medium leading-3 text-gray-700">
-                                                @if ($getRecord()->user->user_type == 'program_chair')
-                                                    {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $getRecord()->user->id)->first()->program->name }}
+                                                @if ($item->user->user_type == 'program_chair')
+                                                    {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $item->user->id)->first()->program->name }}
                                                 @else
                                                     Faculty
                                                 @endif
