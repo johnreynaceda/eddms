@@ -119,18 +119,10 @@
                 <h1 class="text-3xl font-bold font-montserrat">
                     @php
                         $outgoing = 0;
-                        if (auth()->user()->user_type == 'program_chair') {
-                            $outgoing = \App\Models\Document::where('can_view', 'Program Chair')
-                                ->where('user_id', auth()->user()->id)
-                                ->count();
-                        } else {
-                            $outgoing = \App\Models\Document::where('can_view', 'Faculty')
-                                ->where('user_id', auth()->user()->id)
-                                ->count();
-                        }
+                        $outgoing = \App\Models\Document::where('can_view', 'Faculty')
+                            ->where('user_id', auth()->user()->id)
+                            ->count();
                     @endphp
-
-
                     {{ $outgoing }}
                 </h1>
                 <div class="flex space-x-1 text-sm mt-2 items-center">

@@ -65,6 +65,7 @@ class IncomingList extends Component implements HasForms, HasTable
                 ViewColumn::make('details')->label('DETAILS')->view('filament.tables.details'),
 
                 TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
+                TextColumn::make('deadline')->date()->label('DEADLINE')->searchable(),
                
                 TextColumn::make('status')
     
