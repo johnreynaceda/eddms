@@ -62,22 +62,17 @@
                                     <td class="p-4">{{ $item->document_code }}</td>
                                     <td class="p-4">
                                         <div>
-                                            @if ($item->can_view == 'Program Chair')
-                                                <h1 class="uppercase">
-                                                    {{ $item->programChair->lastname . ', ' . $item->programChair->firstname . ' ' . $item->programChair->middlename[0] . '.' }}
-                                                </h1>
-                                                <h1 class="text-xs font-medium leading-3 text-gray-700">
-                                                    {{ 'Program Chairman of ' . $item->programChair->program->name }}
-                                                </h1>
-                                            @else
-                                                <h1 class="uppercase">
-                                                    {{ $item->faculty->lastname . ', ' . $item->faculty->firstname . ' ' . $item->faculty->middlename[0] . '.' }}
-
-                                                </h1>
-                                                <h1 class="text-xs font-medium leading-3 text-gray-700">
+                                            <h1 class="uppercase">
+                                                {{ $getRecord()->user->name }}
+                                            </h1>
+                                            <h1 class="text-xs font-medium leading-3 text-gray-700">
+                                                @if ($getRecord()->user->user_type == 'program_chair')
+                                                    {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $getRecord()->user->id)->first()->program->name }}
+                                                @else
                                                     Faculty
-                                                </h1>
-                                            @endif
+                                                @endif
+
+                                            </h1>
                                         </div>
                                     </td>
 
