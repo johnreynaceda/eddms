@@ -67,6 +67,7 @@ class OutcomingList extends Component implements HasForms, HasTable
                     'pending' => 'warning',
                     'received' => 'success',
                     'rejected' => 'danger',
+                    'due' => 'danger',
                 }),
 
 

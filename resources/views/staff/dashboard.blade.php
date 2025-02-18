@@ -119,10 +119,7 @@
                 <h1 class="text-3xl font-bold font-montserrat">
                     @php
                         $outgoing = 0;
-                        $outgoing = 0;
-                        $outgoing = \App\Models\Document::where('can_view', 'Faculty')
-                            ->where('user_id', auth()->user()->id)
-                            ->count();
+                        $outgoing = \App\Models\Document::where('user_id', auth()->user()->id)->count();
                     @endphp
 
 
