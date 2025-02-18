@@ -11,7 +11,7 @@ class DocumentList extends Component
     public function render()
     {
         return view('livewire.program-chair.document-list',[
-            'categories' => Category::where('name', 'like', '%'. $this->search . '%')->orWhere('type', 'like', '%'. $this->search . '%')->get(),
+            'categories' => Category::where('name', 'like', '%'. $this->search . '%')->get(),
         ]);
     }
 }
