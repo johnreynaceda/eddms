@@ -92,7 +92,7 @@ class CreateDocument extends Component implements HasForms
             'program_chair_id' => $this->program_chair?? null,
             'faculty_id' => $this->faculty?? null,
             'date_of_letter' => Carbon::parse($this->date_of_letter),
-            'deadline' => Carbon::parse($this->deadline),
+            'deadline' => auth()->user()->user_type == 'program_chair' ? Carbon::parse($this->deadline) : null,
         ]);
 
         foreach ($this->file as $key => $value) {

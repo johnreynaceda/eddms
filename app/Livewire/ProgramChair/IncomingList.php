@@ -68,26 +68,22 @@ class IncomingList extends Component implements HasForms, HasTable
                 TextColumn::make('deadline')->date()->label('DEADLINE')->searchable(),
                
                 TextColumn::make('status')
-    
-    ->label('STATUS')
-    ->searchable()
-    ->badge()
-    ->color(fn (?string $state): string => match ($state) { // Handle nullable state
-        'pending' => 'warning',
-        'received' => 'success',
-        'rejected' => 'danger',
-        default => 'secondary'
-    }),
-                TextColumn::make('is_deadline')
-                ->label('IS DEADLINE')
+                ->label('STATUS')
+                ->searchable()
                 ->badge()
-                ->formatStateUsing(fn ($state) => !empty($state) ? 'deadline' : 'not due') // Ensure null is handled
                 ->color(fn (?string $state): string => match ($state) { // Handle nullable state
-                    'deadline' => 'danger', 
-                    'not due' => 'secondary', // Set a meaningful label instead of empty string
-                    default => 'secondary' 
-                })
-                ->visible(fn ($record) => !empty($record->is_deadline)),
+                    'pending' => 'warning',
+                    'received' => 'success',
+                    'due' => 'danger',
+                    'rejected' => 'danger',
+                    default => 'secondary'
+                }),
+                // TextColumn::make('is_deadline')
+                // ->label('IS DEADLINE')
+                // ->badge()
+                // ->formatStateUsing(fn ($state) => $state ? 'deadline' : 'not due') // Ensure proper transformation
+                // ->color(fn ($state) => $state ? 'danger' : 'secondary') // Use raw state for color
+                // ->visible(fn ($record) => isset($record->is_deadline)),
                 TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
 
 
@@ -134,19 +130,20 @@ class IncomingList extends Component implements HasForms, HasTable
     public function checkAllDocument(){
         $today = Carbon::now()->toDateString(); // Get today's date in 'YYYY-MM-DD' format
         $docs = Document::whereDate('deadline', $today)->get(); // Fetch documents with today's deadline
-        $docss = Document::where('is_deadline', true)->whereDate('deadline', '!=', $today)->get();
+        // $docss = Document::where('is_deadline', true)->whereDate('deadline', '!=', $today)->get();
+        // dd($docs);
 
-        if ($docs->isEmpty()) {
-           foreach ($docss as $doc) {
-           $doc->update([
-            'is_deadline' => false,
-           ]);
-        }
-        }
+        // if ($docs->isEmpty()) {
+        //    foreach ($docss as $doc) {
+        //    $doc->update([
+        //     'is_deadline' => false,
+        //    ]);
+        // }
+        // }
     
         foreach ($docs as $doc) {
            $doc->update([
-            'is_deadline' => true,
+            'status' => 'due',
            ]);
         }
     }
