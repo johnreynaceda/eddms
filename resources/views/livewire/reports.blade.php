@@ -33,22 +33,17 @@
                         </td>
                         <td class="border text-sm text-gray-700  px-3 py-1">
                             <div>
-                                {{-- @if ($item->can_view == 'Program Chair')
-                                    <h1 class="uppercase">
-                                        {{ $item->programChair->lastname . ', ' . $item->programChair->firstname . ' ' . $item->programChair->middlename[0] . '.' }}
-                                    </h1>
-                                    <h1 class="text-xs font-medium leading-3 text-gray-700">
-                                        {{ 'Program Chairman of ' . $item->programChair->program->name }}
-                                    </h1>
-                                @else
-                                    <h1 class="uppercase">
-                                        {{ $item->faculty->lastname . ', ' . $item->faculty->firstname . ' ' . $item->faculty->middlename[0] . '.' }}
-
-                                    </h1>
-                                    <h1 class="text-xs font-medium leading-3 text-gray-700">
+                                <h1 class="uppercase">
+                                    {{ $item->user->name }}
+                                </h1>
+                                <h1 class="text-xs font-medium leading-3 text-gray-700">
+                                    @if ($item->user->user_type == 'program_chair')
+                                        {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $item->user->id)->first()->program->name }}
+                                    @else
                                         Faculty
-                                    </h1>
-                                @endif --}}
+                                    @endif
+
+                                </h1>
                             </div>
                         </td>
                         <td class="border text-sm text-gray-700  px-3 py-1">
