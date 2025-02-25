@@ -108,9 +108,13 @@ class CreateDocument extends Component implements HasForms
             'details' => auth()->user()->name. ' has sent you a document. ',
         ]);
         sweetalert()->success('Data is successfully saved!');
+
        if (auth()->user()->user_type == 'program_chair') {
         return redirect()->route('program_chair.dashboard');
-       }else{
+       }elseif(auth()->user()->user_type == 'admin'){
+        return redirect()->route('admin.dashboard');
+       }
+       else{
         return redirect()->route('staff.dashboard');
        }
     }
