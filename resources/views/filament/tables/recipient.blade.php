@@ -19,6 +19,7 @@
     <h1 class="text-xs font-medium leading-3 text-gray-700">
         @if ($getRecord()->user->user_type == 'program_chair')
             {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $getRecord()->user->id)->first()->program->name }}
+        @elseif ($getRecord()->user->user_type == 'admin')
         @else
             Faculty
         @endif

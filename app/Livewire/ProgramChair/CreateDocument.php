@@ -69,12 +69,11 @@ class CreateDocument extends Component implements HasForms
                 ->visible(fn ($get) => $get('can_view') == 'Faculty'),
                 ViewField::make('rating')
             ->view('filament.forms.blank')->columnSpan(2),
-            DatePicker::make('date_of_letter')->required(),
+            DatePicker::make('date_of_letter')->label('Date')->required(),
             DatePicker::make('deadline')->required()->visible(auth()->user()->user_type == 'program_chair'),
 
                ])->columns(2),
                Section::make('Add Attachments')->aside()->icon('heroicon-m-paper-clip')->schema([
-                Textarea::make('attachment_description')->label('Description')->required(),
                 FileUpload::make('file')->required()
                ])->columns(2)
             ]);
@@ -98,7 +97,6 @@ class CreateDocument extends Component implements HasForms
         foreach ($this->file as $key => $value) {
            Attachment::create([
             'document_id' => $docs->id,
-            'description' => $this->attachment_description,
             'file_path' => $value->store('Attachment', 'public'),
            ]);
         }

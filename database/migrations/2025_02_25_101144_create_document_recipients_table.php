@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('document_recipients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('document_id');
-            $table->string('file_path');
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('document_recipients');
     }
 };

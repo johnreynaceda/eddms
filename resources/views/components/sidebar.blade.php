@@ -2,7 +2,18 @@
 
     @if (auth()->user()->user_type == 'admin')
         <nav class="flex-1 space-y-1 ">
+            <a href="{{ route('admin.compose') }}""
+                class="flex space-x-1 hover:scale-95 hover:text-green-600 shadow border-2 border-green-700 justify-center items-center text-gray-700 bg-white rounded-full py-5 px-4 w-full">
 
+                <span class="font-semibold">Compose</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </a>
             <p class="px-4 pt-10 text-xs font-semibold text-main_text uppercase">
 
             </p>
@@ -30,6 +41,22 @@
             </p>
             <ul>
                 <li>
+                    <a class="{{ request()->routeIs('admin.document') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('admin.document') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-file-stack">
+                            <path d="M21 7h-3a2 2 0 0 1-2-2V2" />
+                            <path d="M21 6v6.5c0 .8-.7 1.5-1.5 1.5h-7c-.8 0-1.5-.7-1.5-1.5v-9c0-.8.7-1.5 1.5-1.5H17Z" />
+                            <path d="M7 8v8.8c0 .3.2.6.4.8.2.2.5.4.8.4H15" />
+                            <path d="M3 12v8.8c0 .3.2.6.4.8.2.2.5.4.8.4H11" />
+                        </svg>
+                        <span class="ml-3">
+                            Documents
+                        </span>
+                    </a>
+                </li>
+                <li>
                     <a class="{{ request()->routeIs('admin.staff') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
                         href="{{ route('admin.staff') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -40,7 +67,7 @@
                             <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                         </svg>
                         <span class="ml-3">
-                            Staffs
+                            Faculty
                         </span>
                     </a>
                 </li>

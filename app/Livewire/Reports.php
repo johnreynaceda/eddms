@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\Document;
 use App\Models\Post;
+use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
@@ -21,6 +22,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class Reports extends Component implements HasForms
 {
     use InteractsWithForms;
+    public $selected_report;
 
     public $date_from, $date_to, $type, $status, $deadline;
 
@@ -28,7 +30,12 @@ class Reports extends Component implements HasForms
     {
         return $form
             ->schema([
+                Select::make('selected_report')->options([
+                    '1' => 'List of Personnel',
+                    '2' => 'List of Documents',
+                ])->live(),
                 Fieldset::make('FILTER')->schema([
+                   
                     DatePicker::make('date_from')->columnSpan(2)->live(),
                     DatePicker::make('date_to')->columnSpan(2)->live(),
                     Select::make('type')->options(Category::all()->mapWithKeys(function($record){
@@ -40,7 +47,7 @@ class Reports extends Component implements HasForms
                     ])->live(),
                     DatePicker::make('deadline')->live()
 
-                ])->columns(4),
+                ])->columns(4)->visible($this->selected_report == 2),
                
             ]);
     }
@@ -64,6 +71,7 @@ class Reports extends Component implements HasForms
                 $query->where('status', $this->status);
             })
             ->get(),
+            'personnels' => User::where('user_type', '!=', 'admin')->get(),
         ]);
     }
 

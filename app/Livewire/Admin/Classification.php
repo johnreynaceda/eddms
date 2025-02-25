@@ -32,12 +32,13 @@ class Classification extends Component implements HasForms, HasTable
     {
         return $table
             ->query(\App\Models\Classification::query())->headerActions([
-                CreateAction::make('new')->label('New Classification')->icon('heroicon-o-plus')->form([
+                CreateAction::make('new')->label('New Document Type')->icon('heroicon-o-plus')->form([
                     TextInput::make('name')->required(),
-                ])->modalWidth('xl')
+                ])->modalWidth('xl')->modalHeading('Create Document Type')
+                
             ])
             ->columns([
-                TextColumn::make('name')->label('CLASSIFICATION NAME')->searchable(),
+                TextColumn::make('name')->label('TYPE NAME')->searchable(),
 
             ])
             ->filters([
@@ -46,12 +47,12 @@ class Classification extends Component implements HasForms, HasTable
             ->actions([
                 EditAction::make('edit')->color('success')->form([
                     TextInput::make('name')->required(),
-                ])->modalWidth('xl'),
+                ])->modalWidth('xl')->modalHeading('Edit Type'),
                 // DeleteAction::make('delete'),
             ])
             ->bulkActions([
                 // ...
-            ]);
+            ])->emptyStateHeading('No Document Type');
     }
 
     public function render()

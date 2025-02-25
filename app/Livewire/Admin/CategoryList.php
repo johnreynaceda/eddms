@@ -41,7 +41,7 @@ class CategoryList extends Component implements HasForms, HasTable
             ])
             ->columns([
                 TextColumn::make('name')->label('CATEGORY')->searchable(),
-                TextColumn::make('classification.name')->label('CLASSIFICATION')->searchable(),
+                TextColumn::make('classification.name')->label('TYPE')->searchable(),
 
             ])
             ->filters([

@@ -1,4 +1,4 @@
-@section('title', 'Staffs')
+@section('title', 'Faculty')
 <x-admin-layout>
     <div>
         <livewire:admin.faculty-list />
