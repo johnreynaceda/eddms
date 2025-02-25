@@ -70,7 +70,7 @@ class CreateDocument extends Component implements HasForms
                 ViewField::make('rating')
             ->view('filament.forms.blank')->columnSpan(2),
             DatePicker::make('date_of_letter')->label('Date')->required(),
-            DatePicker::make('deadline')->required()->visible(auth()->user()->user_type == 'program_chair'),
+            DatePicker::make('deadline')->required()->hidden(auth()->user()->user_type == 'staff'),
 
                ])->columns(2),
                Section::make('Add Attachments')->aside()->icon('heroicon-m-paper-clip')->schema([
@@ -91,7 +91,7 @@ class CreateDocument extends Component implements HasForms
             'program_chair_id' => $this->program_chair?? null,
             'faculty_id' => $this->faculty?? null,
             'date_of_letter' => Carbon::parse($this->date_of_letter),
-            'deadline' => auth()->user()->user_type == 'program_chair' ? Carbon::parse($this->deadline) : null,
+            'deadline' => auth()->user()->user_type == 'staff' ? null : Carbon::parse($this->deadline) ,
         ]);
 
         foreach ($this->file as $key => $value) {
