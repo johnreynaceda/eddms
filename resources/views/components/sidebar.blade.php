@@ -35,6 +35,24 @@
                     </a>
                 </li>
 
+                <li>
+                    <a class="{{ request()->routeIs('admin.outgoing') ? 'bg-white text-green-700' : 'text-white ' }} inline-flex items-center w-full px-4 py-2 mt-1 text-sm  transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-white  hover:scale-95 hover:text-green-600"
+                        href="{{ route('admin.outgoing') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-folder-down">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 19h-7a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v3.5" />
+                            <path d="M19 16v6" />
+                            <path d="M22 19l-3 3l-3 -3" />
+                        </svg>
+                        <span class="ml-3">
+                            Outgoing
+                        </span>
+                    </a>
+                </li>
+
             </ul>
             <p class="px-4 pt-5 text-xs font-semibold text-gray-100/50 uppercase">
                 MANAGEMENT

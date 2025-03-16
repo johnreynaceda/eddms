@@ -5,6 +5,7 @@ namespace App\Livewire\ProgramChair;
 use App\Events\SendNotification;
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\DocumentRecipient;
 use App\Models\Faculty;
 use App\Models\Notification;
 use App\Models\Program;
@@ -41,85 +42,81 @@ class IncomingList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Document::query()->where(function ($query) {
-
-                $faculty = Faculty::where('user_id', auth()->user()->id)->first();
-
-                if (auth()->user()->user_type === 'program_chair') {
-                    // Find the program chair record
-                    $programChair = ProgramChair::where('user_id', auth()->user()->id)->first();
-
-
-                    if ($programChair) {
-                        // Filter by the program_id if a ProgramChair is found
-                        $query->where('program_chair_id', $programChair->id);
-                    }
-                }else{
-                    $query->where('faculty_id', $faculty->id);
-                }
-                // No additional filtering for other user types
-            })->orderBy('created_at', 'DESC'))
+            ->query(DocumentRecipient::query()->where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC'))
             ->columns([
-                TextColumn::make('document_code')->label('DOCUMENT CODE')->icon('heroicon-o-document-text')->iconColor('success')->searchable(),
-                ViewColumn::make('id')->label('RECIPIENT')->view('filament.tables.recipient'),
-                ViewColumn::make('details')->label('DETAILS')->view('filament.tables.details'),
+                TextColumn::make('document.document_code')->label('DOCUMENT CODE')->icon('heroicon-o-document-text')->iconColor('success')->searchable(),
+                ViewColumn::make('id')->label('RECIPIENT')->view('filament.tables.recipient')->searchable(
+                    query: function ($query, $search) {
+                        return $query->whereHas('document', function ($q) use ($search) {
+                            $q->whereHas('user', function ($t) use ($search) {
+                                $t->where('name', 'like', "%{$search}%");
+                            });
+                        });
+                    }
+                ),
+                ViewColumn::make('details')->label('DETAILS')->view('filament.tables.detail')->searchable(
+                    query: function ($query, $search) {
+                        return $query->whereHas('document', function ($q) use ($search) {
+                            $q->whereHas('category', function ($t) use ($search) {
+                                $t->where('name', 'like', "%{$search}%")
+                                    ->orWhereHas('classification', function ($c) use ($search) {
+                                        $c->where('name', 'like', "%{$search}%");
+                                    });
+                            });
+                        });
+                    }
+                ),
 
-                TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
-                TextColumn::make('deadline')->date()->label('DEADLINE')->searchable(),
-               
-                TextColumn::make('status')
-                ->label('STATUS')
-                ->searchable()
-                ->badge()
-                ->color(fn (?string $state): string => match ($state) { // Handle nullable state
-                    'pending' => 'warning',
-                    'received' => 'success',
-                    'due' => 'danger',
-                    'rejected' => 'danger',
-                    default => 'secondary'
-                }),
-                // TextColumn::make('is_deadline')
-                // ->label('IS DEADLINE')
-                // ->badge()
-                // ->formatStateUsing(fn ($state) => $state ? 'deadline' : 'not due') // Ensure proper transformation
-                // ->color(fn ($state) => $state ? 'danger' : 'secondary') // Use raw state for color
-                // ->visible(fn ($record) => isset($record->is_deadline)),
-                TextColumn::make('date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
+                TextColumn::make('document.date_of_letter')->date()->label('DATE OF LETTER')->searchable(),
+                TextColumn::make('document.deadline')->date()->label('DEADLINE')->searchable(),
+
+                TextColumn::make('is_read')
+                    ->label('STATUS')
+                    ->searchable()
+                    ->badge()->formatStateUsing(
+                        fn($record) => $record->is_read ? 'Viewed' : 'Awaiting Action'
+                    )
+                    ->color(fn(?string $state): string => match ($state) { // Handle nullable state
+                        '0' => 'warning',
+                        '1' => 'success',
+
+                    }),
 
 
-                ])
+
+            ])
             ->filters([
                 // ...
             ])
             ->actions([
-               ViewAction::make('view')->color('success')->button()->disabled(fn($record) => $record->is_deadline)->form(
-                function($record){
-                    $user_id = $record->program_chair_id == null ? Faculty::find($record->faculty_id)->first()->user_id : ProgramChair::find($record->program_chair_id)->user_id;
-
-                    // dd($user_id);
-                   if ($record->status != 'received') {
-                    $record->update([
-                        'status' => 'received',
-                    ]);
-
-                   
-
-                    SendNotification::dispatch($record->user_id);
-                    Notification::create([
-                        'receiver_id' => $record->user_id,
-                        'sender_id' => auth()->user()->id,
-                        'details' => auth()->user()->name. ' has received the document you sent. ',
-                    ]);
-                   }
+                ViewAction::make('view')->color('success')->button()->disabled(fn($record) => $record->document->is_deadline)->form(
+                    function ($record) {
+                        // $user_id = $record->program_chair_id == null ? Faculty::find($record->faculty_id)->first()->user_id : ProgramChair::find($record->program_chair_id)->user_id;
+            
+                        // dd($user_id);
+                        if ($record->is_read != true) {
+                            $record->update([
+                                'is_read' => true,
+                            ]);
 
 
-                    return [
-                        ViewField::make('rating')
-            ->view('filament.forms.pdf')
-                    ];
 
-                }
-               )
+                            SendNotification::dispatch($record->user_id);
+                            Notification::create([
+                                'receiver_id' => $record->user_id,
+                                'sender_id' => auth()->user()->id,
+                                'details' => auth()->user()->name . ' has received the document you sent. ',
+                            ]);
+                        }
+
+
+                        return [
+                            ViewField::make('rating')
+                                ->view('filament.forms.incoming')
+                        ];
+
+                    }
+                )
             ])
             ->bulkActions([
                 // ...
@@ -127,7 +124,8 @@ class IncomingList extends Component implements HasForms, HasTable
     }
 
 
-    public function checkAllDocument(){
+    public function checkAllDocument()
+    {
         $today = Carbon::now()->toDateString(); // Get today's date in 'YYYY-MM-DD' format
         $docs = Document::whereDate('deadline', $today)->get(); // Fetch documents with today's deadline
         // $docss = Document::where('is_deadline', true)->whereDate('deadline', '!=', $today)->get();
@@ -140,11 +138,11 @@ class IncomingList extends Component implements HasForms, HasTable
         //    ]);
         // }
         // }
-    
+
         foreach ($docs as $doc) {
-           $doc->update([
-            'status' => 'due',
-           ]);
+            $doc->update([
+                'status' => 'due',
+            ]);
         }
     }
 

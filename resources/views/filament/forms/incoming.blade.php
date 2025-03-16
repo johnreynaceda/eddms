@@ -1,12 +1,12 @@
 <div>
     @php
-        $file = $getRecord()->attachments->first()->file_path;
+        $file = $getRecord()->document->attachments->first()->file_path;
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
     @endphp
 
     <div>
         @if ($fileExtension == 'pdf')
-            <iframe src="{{ Storage::url($getRecord()->attachments->first()->file_path) }}" width="100%"
+            <iframe src="{{ Storage::url($getRecord()->document->attachments->first()->file_path) }}" width="100%"
                 height="600px"></iframe>
         @else
             <div class="w-64 p-5 border rounded-xl">
@@ -90,27 +90,24 @@
                 </svg>
                 <div class="mt-4">
                     <x-button label="Open Document" class="w-full" positive
-                        href="{{ Storage::url($getRecord()->attachments->first()->file_path) }}" target="_blank"
-                        rounded />
+                        href="{{ Storage::url($getRecord()->document->attachments->first()->file_path) }}"
+                        target="_blank" rounded />
                 </div>
             </div>
         @endif
     </div>
-    <div class="mt-10">
-        <h1 class="text-xl font-semibold text-green-600"> {{ $getRecord()->can_view }}:</h1>
+    {{-- <div class="mt-10">
+        <h1 class="text-xl font-semibold text-green-600"> {{ $getRecord()->document->can_view }}:</h1>
         <div class="mt-5 w-1/2">
             <ul class="space-y-4">
-                @forelse ($getRecord()->documentRecipients as $item)
+                @forelse ($getRecord()->document->documentRecipients as $item)
                     <li class="flex justify-between items-center">
                         <div class="flex space-x-2 items-center">
                             <img src="{{ asset('images/ccs_logo.png') }}" class="h-8" alt="">
                             <div>
                                 <h1>{{ $item->user->name }}</h1>
                                 <h1 class="leading-3 text-sm">
-                                    @if ($item->user->user_type == 'Program Chair')
-                                        {{ \App\Models\ProgramChair::where('user_id', $item->user_id)->first()->program->name }}
-                                    @endif
-
+                                    {{ \App\Models\ProgramChair::where('user_id', $item->user_id)->first()->program->name }}
                                 </h1>
                             </div>
                         </div>
@@ -127,6 +124,6 @@
                 @endforelse
             </ul>
         </div>
-    </div>
+    </div> --}}
 
 </div>

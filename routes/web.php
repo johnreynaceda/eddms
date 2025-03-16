@@ -47,6 +47,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/document', function () {
         return view('admin.document');
     })->name('admin.document');
+    Route::get('/outgoing', function () {
+        return view('admin.outgoing');
+    })->name('admin.outgoing');
 });
 
 Route::prefix('program_chair')->middleware(['auth', 'verified', UserActive::class])->group(function () {

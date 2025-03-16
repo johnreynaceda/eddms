@@ -27,8 +27,8 @@ class DocumentOpen extends Component
 
     public function setDate($id)
     {
-        $this->doc_id        = $id;
-        $data                = Document::where('id', $this->doc_id)->first();
+        $this->doc_id = $id;
+        $data = Document::where('id', $this->doc_id)->first();
         $this->date_filtered = Carbon::parse($data->date_of_letter);
 
     }
@@ -40,7 +40,7 @@ class DocumentOpen extends Component
 
     public function viewDocument($id)
     {
-        $this->view_data  = Document::where('id', $id)->first();
+        $this->view_data = Document::where('id', $id)->first();
         $this->view_modal = true;
     }
 
@@ -48,20 +48,26 @@ class DocumentOpen extends Component
     {
 
         return view('livewire.program-chair.document-open', [
-            'dates'     => Document::where('category_id', $this->category_id)
+            'dates' => Document::where('category_id', $this->category_id)
                 ->where('date_of_letter', 'like', '%' . $this->search_folder . '%')
                 ->get()
                 ->unique('date_of_letter'),
-            'documents' => Document::whereDate('date_of_letter', $this->date_filtered)
-                ->where(function ($query) {
-                    $query->where('document_code', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('faculty', function ($faculty) {
-                            $faculty->where('lastname', 'like', '%' . $this->search . '%')->orWhere('firstname', 'like', '%' . $this->search . '%');
-                        })->orWhereHas('programChair', function ($programChair) {
-                        $programChair->where('lastname', 'like', '%' . $this->search . '%')->orWhere('firstname', 'like', '%' . $this->search . '%');
-                    });
-                })
+            'documents' => Document::where(function ($query) {
+                $query->where('document_code', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('user', function ($user) {
+                        $user->where('name', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('category', function ($cat) {
+                        $cat->where('name', 'like', '%' . $this->search . '%')
+                            ->orWhereHas('classification', function ($clas) {
+                                $clas->where('name', 'like', '%' . $this->search . '%');
+                            });
+                    })
+                    ->orWhereRaw("strftime('%F %d, %Y', date_of_letter) LIKE ?", ['%' . $this->search . '%']); // Search formatted date
+            })
+                ->whereDate('date_of_letter', $this->date_filtered) // Keep date filter
                 ->get(),
+
 
         ]);
 

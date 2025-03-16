@@ -10,23 +10,33 @@ class Document extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function programChair(){
+    public function programChair()
+    {
         return $this->belongsTo(ProgramChair::class);
     }
 
-    public function faculty(){
+    public function faculty()
+    {
         return $this->belongsTo(Faculty::class);
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function attachments(){
+    public function attachments()
+    {
         return $this->hasMany(Attachment::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
+    }
+
+    public function documentRecipients()
+    {
+        return $this->hasMany(DocumentRecipient::class);
     }
 }

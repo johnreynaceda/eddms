@@ -6,12 +6,14 @@ use App\Events\SendNotification;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\DocumentRecipient;
 use App\Models\Faculty;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\ProgramChair;
 use App\Models\User;
 use Carbon\Carbon;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
@@ -32,7 +34,7 @@ class CreateDocument extends Component implements HasForms
     use InteractsWithForms;
     use WithFileUploads;
 
-    public $can_view;
+    public $can_view, $send_to_all = false;
     public $document_code, $subject, $description, $category, $program_chair, $faculty, $date_of_letter, $deadline, $file = [], $attachment_description;
 
     public function form(Form $form): Form
@@ -55,20 +57,21 @@ class CreateDocument extends Component implements HasForms
                 ->live(),
 
             Select::make('program_chair')
-                ->label('Program Chair')
+                ->label('Program Chair')->multiple()
                 ->options(ProgramChair::where('user_id', '!=', auth()->user()->id)->get()->mapWithKeys(function($record){
                     return [$record->id => $record->lastname. ', '. $record->firstname]; // Adjust according to your program chair model's structure
                 }))
-                ->visible(fn ($get) => $get('can_view') == 'Program Chair'),
+                ->visible(fn ($get) => $get('can_view') == 'Program Chair')->disabled(fn() => $this->send_to_all == true),
 
             Select::make('faculty')
-                ->label('Faculty')
+                ->label('Faculty')->multiple()
                 ->options(Faculty::where('user_id', '!=', auth()->user()->id)->get()->mapWithKeys(function($record){
                     return [$record->id => $record->lastname. ', '. $record->firstname]; // Adjust according to your program chair model's structure
                 }))
                 ->visible(fn ($get) => $get('can_view') == 'Faculty'),
                 ViewField::make('rating')
-            ->view('filament.forms.blank')->columnSpan(2),
+            ->view('filament.forms.blank')->columnSpan(1),
+            Checkbox::make('send_to_all') ->visible(fn ($get) => $get('can_view') != null)->columnSpan(1)->reactive(),
             DatePicker::make('date_of_letter')->label('Date')->required(),
             DatePicker::make('deadline')->required()->hidden(auth()->user()->user_type == 'staff'),
 
@@ -88,8 +91,8 @@ class CreateDocument extends Component implements HasForms
             'subject' => $this->subject,
             'category_id' => $this->category,
             'can_view' => $this->can_view,
-            'program_chair_id' => $this->program_chair?? null,
-            'faculty_id' => $this->faculty?? null,
+            // 'program_chair_id' => $this->program_chair?? null,
+            // 'faculty_id' => $this->faculty?? null,
             'date_of_letter' => Carbon::parse($this->date_of_letter),
             'deadline' => auth()->user()->user_type == 'staff' ? null : Carbon::parse($this->deadline) ,
         ]);
@@ -100,13 +103,88 @@ class CreateDocument extends Component implements HasForms
             'file_path' => $value->store('Attachment', 'public'),
            ]);
         }
-        $user_id = $this->program_chair == null ? Faculty::find($this->faculty)->first()->user_id : ProgramChair::find($this->program_chair)->user_id;
-        SendNotification::dispatch($user_id);
-        Notification::create([
-            'receiver_id' => $user_id,
-            'sender_id' => auth()->user()->id,
-            'details' => auth()->user()->name. ' has sent you a document. ',
-        ]);
+
+        if ($this->can_view == 'Program Chair') {
+            if ($this->send_to_all == true) {
+                $program_chairs = ProgramChair::all();
+                foreach ($program_chairs as $key => $value) {
+                   DocumentRecipient::create([
+                    'document_id' => $docs->id,
+                    'user_id' => $value->user_id
+                   ]);
+                   SendNotification::dispatch($value->user_id);
+                    Notification::create([
+                        'receiver_id' => $value->user_id,
+                        'sender_id' => auth()->user()->id,
+                        'details' => auth()->user()->name. ' has sent you a document. ',
+                    ]);
+
+                }
+            }else{
+                foreach ($this->program_chair as $key => $value) {
+                    $user = ProgramChair::where('id', $value)->first();
+                   DocumentRecipient::create([
+                    'document_id' => $docs->id,
+                    'user_id' => $user->user_id,
+                   ]);
+
+                //    $user_id = ProgramChair::where('id', $value)->first()->user_id;
+
+                   SendNotification::dispatch($user->user_id,);
+                    Notification::create([
+                        'receiver_id' => $user->user_id,
+                        'sender_id' => auth()->user()->id,
+                        'details' => auth()->user()->name. ' has sent you a document. ',
+                    ]);
+                }
+            }
+        }else{
+            if ($this->send_to_all == true) {
+                $faculties = Faculty::all();
+                foreach ($faculties as $key => $value) {
+                    DocumentRecipient::create([
+                    'document_id' => $docs->id,
+                    'user_id' => $value->user_id,
+                   ]);
+                   SendNotification::dispatch($value->user_id);
+                    Notification::create([
+                        'receiver_id' => $value->user_id,
+                        'sender_id' => auth()->user()->id,
+                        'details' => auth()->user()->name.'has sent you a document. ',
+                    ]);
+                }
+            }else{
+                foreach ($this->faculty as $key => $value) {
+                    $user = Faculty::where('id', $value)->first();
+                    DocumentRecipient::create([
+                    'document_id' => $docs->id,
+                    'user_id' => $user->user_id
+                   ]);
+
+
+                   SendNotification::dispatch($user->user_id);
+                    Notification::create([
+                        'receiver_id' => $user->user_id,
+                        'sender_id' => auth()->user()->id,
+                        'details' => auth()->user()->name.'has sent you a document. ',
+                    ]);
+                }
+            }
+
+        }
+
+       
+        // $user_id = $this->program_chair == null ? Faculty::find($this->faculty)->first()->user_id : ProgramChair::find($this->program_chair)->user_id;
+        // SendNotification::dispatch($user_id);
+        // Notification::create([
+        //     'receiver_id' => $user_id,
+        //     'sender_id' => auth()->user()->id,
+        //     'details' => auth()->user()->name. ' has sent you a document. ',
+        // ]);
+
+
+
+
         sweetalert()->success('Data is successfully saved!');
 
        if (auth()->user()->user_type == 'program_chair') {

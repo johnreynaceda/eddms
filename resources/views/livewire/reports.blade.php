@@ -99,7 +99,10 @@
                             <tr>
                                 <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">DOCUMENT CODE</th>
                                 <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
-                                    RECIPIENT
+                                    SENDER
+                                </th>
+                                <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
+                                    RECEIVER
                                 </th>
                                 <th class="border  text-left px-2 text-sm font-semibold text-gray-700 py-2">
                                     DETAILS
@@ -123,14 +126,15 @@
                                             <h1 class="uppercase">
                                                 {{ $item->user->name }}
                                             </h1>
-                                            <h1 class="text-xs font-medium leading-3 text-gray-700">
-                                                @if ($item->user->user_type == 'program_chair')
-                                                    {{ 'Program Chairman of ' . \App\Models\ProgramChair::where('user_id', $item->user->id)->first()->program->name }}
-                                                @elseif ($item->user->user_type == 'admin')
-                                                @else
-                                                    Faculty
-                                                @endif
 
+                                        </div>
+                                    </td>
+                                    <td class="border text-sm text-gray-700  px-3 py-1">
+                                        <div>
+                                            <h1 class="uppercase">
+                                                @foreach ($item->documentRecipients as $index => $receiver)
+                                                    {{ $receiver->user->name }}{{ $loop->last ? '' : ', ' }}
+                                                @endforeach
                                             </h1>
                                         </div>
                                     </td>

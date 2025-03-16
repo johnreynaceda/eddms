@@ -1,14 +1,8 @@
 <?php
 
-namespace App\Livewire\ProgramChair;
+namespace App\Livewire\Admin;
 
-use App\Models\Category;
 use App\Models\Document;
-use App\Models\Program;
-use App\Models\ProgramChair;
-use App\Models\Shop\Product;
-use App\Models\User;
-use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -21,6 +15,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -35,12 +30,10 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class OutcomingList extends Component implements HasForms, HasTable
+class OutgoingRecord extends Component implements HasForms, HasTable
 {
     use InteractsWithTable;
     use InteractsWithForms;
-
-    public $upload = [];
 
     public function table(Table $table): Table
     {
@@ -63,12 +56,19 @@ class OutcomingList extends Component implements HasForms, HasTable
                 }),
 
                 TextColumn::make('date_of_letter')->date('m-d-Y')->label('DATE OF LETTER')->searchable('date_of_letter'),
-                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn(string $state): string => match ($state) {
-                    'pending' => 'warning',
-                    'received' => 'success',
-                    'rejected' => 'danger',
-                    'due' => 'danger',
-                }),
+                TextColumn::make('status')->formatStateUsing(
+                    fn(?string $state): string => match ($state) {
+                        'pending' => 'Awaiting Action',
+                        'received' => 'Received',
+                        'rejected' => 'Rejected',
+                        'due' => 'Due',
+                    }
+                )->label('STATUS')->searchable()->badge()->color(fn(string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'received' => 'success',
+                        'rejected' => 'danger',
+                        'due' => 'danger',
+                    }),
 
 
             ])
@@ -76,44 +76,10 @@ class OutcomingList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                ViewAction::make('view')->color('success')->button()->form([
+                Action::make('view')->slideOver()->form([
                     ViewField::make('rating')
                         ->view('filament.forms.pdf')
-                ]),
-                EditAction::make('edit')->color('success')->form([
-                    Grid::make(2)->schema([
-                        Textarea::make('subject')->required(),
-                        Select::make('category_id')->label('Classification')->options(Category::all()->mapWithKeys(function ($record) {
-                            return [$record->id => $record->classification->name . ' - ' . $record->name];
-                        })),
-                        DatePicker::make('deadline')->required(),
-                    ]),
-                    Fieldset::make('Attachments')->schema([
-                        ViewField::make('file')->view('filament.forms.upload')
-                    ])
-                ])->action(
-                        function ($record, $data) {
-                            $this->validate([
-                                'upload' => 'required'
-                            ]);
-
-                            $record->update([
-                                'subject' => $data['subject'],
-                                'category_id' => $data['category_id'],
-                                'deadline' => Carbon::parse($data['deadline']),
-                            ]);
-
-                            $docs = $record->attachments->first();
-
-                            foreach ($this->upload as $key => $value) {
-                                $docs->update([
-                                    'file_path' => $value->store('Attachment', 'public'),
-                                ]);
-                            }
-
-
-                        }
-                    ),
+                ])
             ])
             ->bulkActions([
                 // ...
@@ -122,6 +88,6 @@ class OutcomingList extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('livewire.program-chair.outcoming-list');
+        return view('livewire.admin.outgoing-record');
     }
 }
